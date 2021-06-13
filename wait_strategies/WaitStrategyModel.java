@@ -23,8 +23,8 @@ public abstract class WaitStrategyModel extends Model {
     }
 
 
-    public WaitStrategyModel(Model owner, String name, boolean showInReport, boolean showIntrace) {
-        super(owner, name, showInReport, showIntrace);
+    public WaitStrategyModel(Model owner, String name, boolean showInReport, boolean showInTrace) {
+        super(owner, name, showInReport, showInTrace);
     }
 
 

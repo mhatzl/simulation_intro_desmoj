@@ -21,11 +21,11 @@ public class WaitStrategiesExperiments {
 
     public static void main(java.lang.String[] args) {
 
-        var singleWaitModel = new SingleWaitStrategyModel(null, "Main Model", true, true, 2);
+        var singleWaitModel = new SingleWaitStrategyModel(null, "SingleWait Model", true, true, 2);
         runExperiment("WaitStrategie_SingleWS", singleWaitModel);
 
-        var single2WaitModel = new SingleWaitStrategyModel(null, "Main Model", true, true, 4);
-        runExperiment("WaitStrategie_Single2WS", single2WaitModel);
+        var multiWaitStrategyModel = new MultiWaitStrategyModel(null, "MultiWait Model", true, true, 2);
+        runExperiment("WaitStrategie_MultiWS", multiWaitStrategyModel);
 
     }
 }

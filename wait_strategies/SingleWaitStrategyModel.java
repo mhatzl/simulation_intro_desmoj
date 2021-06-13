@@ -11,8 +11,8 @@ public class SingleWaitStrategyModel extends WaitStrategyModel {
     private Queue<SchalterEntity> besetzteSchalterQueue;
     private final int nrSchalter;
 
-    public SingleWaitStrategyModel(Model owner, String name, boolean showInReport, boolean showIntrace, int nrSchalter) {
-        super(owner, name, showInReport, showIntrace);
+    public SingleWaitStrategyModel(Model owner, String name, boolean showInReport, boolean showInTrace, int nrSchalter) {
+        super(owner, name, showInReport, showInTrace);
         this.nrSchalter = nrSchalter;
     }
 
@@ -25,7 +25,7 @@ public class SingleWaitStrategyModel extends WaitStrategyModel {
 
         SchalterEntity schalter;
         for (int i = 1; i <= this.nrSchalter; i++){
-            schalter = new SchalterEntity(this, "Schalter" + i, true);
+            schalter = new SchalterEntity(this, "Schalter_" + i, true);
             freieSchalterQueue.insert(schalter);
         }
 
