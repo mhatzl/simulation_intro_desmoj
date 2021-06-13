@@ -97,4 +97,9 @@ public class SingleWaitStrategyModel extends WaitStrategyModel {
     public int getBestWarteschlange() {
         return 0;
     }
+
+    @Override
+    public void doKundenWechsel() {
+        // Kundenwechsel nicht erlaubt bei SingleWait
+    }
 }

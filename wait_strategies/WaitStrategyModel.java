@@ -6,6 +6,7 @@ import desmoj.core.simulator.TimeSpan;
 public abstract class WaitStrategyModel extends Model {
 
     private ContDistExponential kundenAnkunftsZeit;
+    private ContDistExponential kundenWechselZeit;
     private ContDistUniform bedienZeit;
 
     /**
@@ -13,6 +14,13 @@ public abstract class WaitStrategyModel extends Model {
      */
     public double getKundenAnkunftsZeit() {
         return kundenAnkunftsZeit.sample();
+    }
+
+    /**
+     * liefert eine Zufallszahl fuer Kundenwechselzeit
+     */
+    public double getKundenWechselZeit() {
+        return kundenWechselZeit.sample();
     }
 
     /**
@@ -45,6 +53,10 @@ public abstract class WaitStrategyModel extends Model {
     public void doInitialSchedules() {
         NeuerKundeEvent ersterKunde = new NeuerKundeEvent(this, "Kundenkreation", true);
         ersterKunde.schedule(new TimeSpan(this.getKundenAnkunftsZeit()));
+
+        // Kunde aus Warteschlange kann Warteschlange wechseln
+        KundeWechselEvent kundenWechsel = new KundeWechselEvent (this, "Kundenwechsel", true);
+        kundenWechsel.schedule(new TimeSpan(this.getKundenWechselZeit()));
     }
 
     /**
@@ -54,6 +66,9 @@ public abstract class WaitStrategyModel extends Model {
         this.kundenAnkunftsZeit = new ContDistExponential(this, "Ankunftszeitintervall", 3.0, true, true);
         this.kundenAnkunftsZeit.setNonNegative(true);
         //kundenAnkunftsZeit.setSeed(1234567890);
+
+        this.kundenWechselZeit = new ContDistExponential(this, "Wechselzeitintervall", 5.0, true, true);
+        this.kundenWechselZeit.setNonNegative(true);
 
         this.bedienZeit = new ContDistUniform(this, "Bedienzeiten", 0.5, 10.0, true, true);
     }
@@ -74,5 +89,6 @@ public abstract class WaitStrategyModel extends Model {
     public abstract String kundenWarteschlangeQueueToString();
 
     public abstract int getBestWarteschlange();
+    public abstract void doKundenWechsel();
 
 }

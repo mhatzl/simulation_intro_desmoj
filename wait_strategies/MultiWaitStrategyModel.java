@@ -119,4 +119,22 @@ public class MultiWaitStrategyModel extends WaitStrategyModel {
 
         return bestWarteschlangenIndex;
     }
+
+    @Override
+    public void doKundenWechsel() {
+
+        for (int i = 0; i < this.kundenReiheQueues.size(); i++) {
+            if (this.kundenReiheQueues.get(i).length() > 1) {
+                var kunde = this.kundenReiheQueues.get(i).last();
+                var bestWarteschlange = this.getBestWarteschlange();
+                if (kunde.getWarteschlangeZuordnung() != bestWarteschlange) {
+                    kunde.setWarteschlangeZuordnung(bestWarteschlange);
+                    this.kundenReiheQueues.get(bestWarteschlange).insert(kunde);
+                    this.kundenReiheQueues.get(i).remove(kunde);
+
+                    sendTraceNote("Kunde wechselt von " + (i + 1) + " -> " + (bestWarteschlange + 1));
+                }
+            }
+        }
+    }
 }
