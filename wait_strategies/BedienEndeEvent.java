@@ -19,7 +19,7 @@ public class BedienEndeEvent extends Event<KundeEntity> {
             KundeEntity naechsterKunde = this.meinModel.kundenWarteschlangeQueueFirst(kunde);
             this.meinModel.kundenWarteschlangeQueueRemove(naechsterKunde);
 
-            // Nachdem Warteschlangenlängen sich verändert haben, ist eventuell ein möglicher Wartschlangenwechsel sinnvoll
+            // Nachdem sich Warteschlangen verändert haben, ist eventuell ein Warteschlangenwechsel sinnvoll
             this.meinModel.doKundenWechsel();
 
             BedienEndeEvent bedienEnde = new BedienEndeEvent (this.meinModel, "Bedienung Ende", true);

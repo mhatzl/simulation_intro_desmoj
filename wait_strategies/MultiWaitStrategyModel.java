@@ -150,12 +150,9 @@ public class MultiWaitStrategyModel extends WaitStrategyModel {
                     this.kundenReiheQueues.get(bestWarteschlange).insert(kunde);
                     this.kundenReiheQueues.get(i).remove(kunde);
 
-                    sendTraceNote("Kunde wechselt von Warteschlange " + (i + 1) + " (Laenge: " + laengeWS1
-                            + ") -> " + (bestWarteschlange + 1) + " (Laenge: " + laengeWS2 + ")");
-                } /*else
-                    sendTraceNote("Kunde wechselt NICHT von Warteschlange " + (i + 1) + " (Laenge: " + this.kundenReiheQueues.get(i).length()
-                        + ") -> " + (bestWarteschlange + 1) + " (Laenge: " + this.kundenReiheQueues.get(bestWarteschlange).length() + ")");
-                        */
+                    sendTraceNote("Kunde wechselt von Warteschlange " + (i + 1) + " (prev. Laenge: " + laengeWS1
+                            + ") -> " + (bestWarteschlange + 1) + " (prev. Laenge: " + laengeWS2 + ")");
+                }
             }
         }
     }

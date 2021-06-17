@@ -1,19 +1,44 @@
-import desmoj.core.dist.ContDistExponential;
 import desmoj.core.dist.ContDistUniform;
 import desmoj.core.dist.DiscreteDistPoisson;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
 
+
 public abstract class WaitStrategyModel extends Model {
 
     private DiscreteDistPoisson kundenAnkunftsZeit;
     private ContDistUniform bedienZeit;
+    private final TimeFrame morningPeek = new TimeFrame(6 * 60, 8 * 60); // h -> min
+    private final TimeFrame eveningPeek = new TimeFrame(16 * 60, 18 * 60); // h -> min
+
+    private static class TimeFrame {
+        private final double startTime;
+        private final double endTime;
+
+        TimeFrame(double startTime, double endTime) {
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
+
+        boolean isInTimeFrame(double time) {
+            return (this.startTime < time && this.endTime > time);
+        }
+    }
+
 
     /**
      * liefert eine Zufallszahl fuer Kundenankunftszeit
+     * Simuliert mehr Kunden zu Peekzeiten
      */
     public Long getKundenAnkunftsZeit() {
-        return kundenAnkunftsZeit.sample();
+        Long ankunftsZeit = kundenAnkunftsZeit.sample();
+        double simTime = this.getExperiment().getSimClock().getTime().getTimeAsDouble();
+
+        if (this.morningPeek.isInTimeFrame(simTime) || this.eveningPeek.isInTimeFrame(simTime)) {
+            ankunftsZeit /= 2;
+        }
+
+        return ankunftsZeit;
     }
 
     /**
@@ -52,7 +77,7 @@ public abstract class WaitStrategyModel extends Model {
      * Initialisierung des Modells
      */
     public void init() {
-        this.kundenAnkunftsZeit = new DiscreteDistPoisson(this, "Ankunftszeitintervall", 5, true, true);
+        this.kundenAnkunftsZeit = new DiscreteDistPoisson(this, "Ankunftszeitintervall", 5, true, true);    // 1 Kunde pro meanValue im Durchschnitt
         this.kundenAnkunftsZeit.setNonNegative(true);
 
         this.bedienZeit = new ContDistUniform(this, "Bedienzeiten", 0.5, 10.0, true, true);

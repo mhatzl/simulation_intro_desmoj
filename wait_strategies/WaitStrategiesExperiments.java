@@ -2,7 +2,7 @@ import desmoj.core.simulator.*;
 
 public class WaitStrategiesExperiments {
 
-    public static final int SIMULATION_TIME = 1000;
+    public static final int SIMULATION_TIME = 24 * 60; // h -> min
 
     private static void runExperiment(String name, WaitStrategyModel model) {
         Experiment waitStrategyExperiment = new Experiment(name);
@@ -23,15 +23,25 @@ public class WaitStrategiesExperiments {
 
     public static void main(java.lang.String[] args) {
 
+        System.out.println("Single Queue Run");
         var singleWaitModel = new SingleWaitStrategyModel(null, "SingleWait Model", true, true, 2);
         runExperiment("WaitStrategie_SingleWS", singleWaitModel);
 
         /*
+        // Kundenstatistiken zur SingleQueue
+        int counter = 0, sum = 0;
         for(int i = 0; i < KundenCounter.getInstance().kundenCounterList.length; i++ ){
-            if(KundenCounter.getInstance().kundenCounterList[i] != 0)
-                System.out.println(i + "," + KundenCounter.getInstance().kundenCounterList[i]);
+            if(counter < 10) {
+                counter++;
+                sum += KundenCounter.getInstance().kundenCounterList[i];
+            } else {
+                System.out.println(i + ";" + sum);
+                sum = KundenCounter.getInstance().kundenCounterList[i];
+                counter = 1;
+            }
         }*/
 
+        System.out.println("Multi Queue Run");
         KundenCounter.resetInstance();
 
         var multiWaitStrategyModel = new MultiWaitStrategyModel(null, "MultiWait Model", true, true, 2);
