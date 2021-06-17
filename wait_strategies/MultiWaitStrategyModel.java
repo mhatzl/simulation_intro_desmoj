@@ -105,13 +105,28 @@ public class MultiWaitStrategyModel extends WaitStrategyModel {
     }
 
     @Override
-    public int getBestWarteschlange() {
+    public int getShortestWarteschlange() {
         int bestWarteschlangenIndex = 0;
         int bestWarteschlangenLaenge = this.kundenReiheQueues.get(0).length();
 
         for (int i = 0; i < this.kundenReiheQueues.size(); i++) {
             int actWarteschlangenLaenge = this.kundenReiheQueues.get(i).length();
             if (bestWarteschlangenLaenge > actWarteschlangenLaenge) {
+                bestWarteschlangenLaenge = actWarteschlangenLaenge;
+                bestWarteschlangenIndex = i;
+            }
+        }
+
+        return bestWarteschlangenIndex; }
+
+    @Override
+    public int getBestWarteschlange() {
+        int bestWarteschlangenIndex = -1;
+        int bestWarteschlangenLaenge = this.kundenReiheQueues.get(0).length();
+
+        for (int i = 0; i < this.kundenReiheQueues.size(); i++) {
+            int actWarteschlangenLaenge = this.kundenReiheQueues.get(i).length();
+            if (bestWarteschlangenLaenge > (actWarteschlangenLaenge+1)) {
                 bestWarteschlangenLaenge = actWarteschlangenLaenge;
                 bestWarteschlangenIndex = i;
             }
@@ -127,13 +142,17 @@ public class MultiWaitStrategyModel extends WaitStrategyModel {
             if (this.kundenReiheQueues.get(i).length() > 1) {
                 var kunde = this.kundenReiheQueues.get(i).last();
                 var bestWarteschlange = this.getBestWarteschlange();
-                if (kunde.getWarteschlangeZuordnung() != bestWarteschlange) {
+                if (bestWarteschlange != -1 && kunde.getWarteschlangeZuordnung() != bestWarteschlange) {
                     kunde.setWarteschlangeZuordnung(bestWarteschlange);
                     this.kundenReiheQueues.get(bestWarteschlange).insert(kunde);
                     this.kundenReiheQueues.get(i).remove(kunde);
 
-                    sendTraceNote("Kunde wechselt von " + (i + 1) + " -> " + (bestWarteschlange + 1));
-                }
+                    sendTraceNote("Kunde wechselt von Warteschlange " + (i + 1) + " (Laenge: " + this.kundenReiheQueues.get(i).length()
+                            + ") -> " + (bestWarteschlange + 1) + " (Laenge: " + this.kundenReiheQueues.get(bestWarteschlange).length() + ")");
+                } /*else
+                    sendTraceNote("Kunde wechselt NICHT von Warteschlange " + (i + 1) + " (Laenge: " + this.kundenReiheQueues.get(i).length()
+                        + ") -> " + (bestWarteschlange + 1) + " (Laenge: " + this.kundenReiheQueues.get(bestWarteschlange).length() + ")");
+                        */
             }
         }
     }

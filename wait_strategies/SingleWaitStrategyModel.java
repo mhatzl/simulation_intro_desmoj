@@ -94,6 +94,9 @@ public class SingleWaitStrategyModel extends WaitStrategyModel {
     }
 
     @Override
+    public int getShortestWarteschlange() { return 0; }
+
+    @Override
     public int getBestWarteschlange() {
         return 0;
     }

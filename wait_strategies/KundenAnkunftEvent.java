@@ -14,7 +14,7 @@ public class KundenAnkunftEvent extends Event<KundeEntity> {
     }
 
     public void eventRoutine(KundeEntity kunde) {
-        kunde.setWarteschlangeZuordnung(this.meinModel.getBestWarteschlange());
+        kunde.setWarteschlangeZuordnung(this.meinModel.getShortestWarteschlange());
 
         this.meinModel.kundenWarteschlangeQueueInsert(kunde);
         sendTraceNote(this.meinModel.kundenWarteschlangeQueueToString());

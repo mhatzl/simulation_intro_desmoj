@@ -1,11 +1,12 @@
 import desmoj.core.dist.ContDistExponential;
 import desmoj.core.dist.ContDistUniform;
+import desmoj.core.dist.DiscreteDistPoisson;
 import desmoj.core.simulator.Model;
 import desmoj.core.simulator.TimeSpan;
 
 public abstract class WaitStrategyModel extends Model {
 
-    private ContDistExponential kundenAnkunftsZeit;
+    private DiscreteDistPoisson kundenAnkunftsZeit;
     private ContDistExponential kundenWechselZeit;
     private ContDistUniform bedienZeit;
 
@@ -55,20 +56,20 @@ public abstract class WaitStrategyModel extends Model {
         ersterKunde.schedule(new TimeSpan(this.getKundenAnkunftsZeit()));
 
         // Kunde aus Warteschlange kann Warteschlange wechseln
-        KundeWechselEvent kundenWechsel = new KundeWechselEvent (this, "Kundenwechsel", true);
-        kundenWechsel.schedule(new TimeSpan(this.getKundenWechselZeit()));
+        //KundeWechselEvent kundenWechsel = new KundeWechselEvent (this, "Kundenwechsel", true);
+        //kundenWechsel.schedule(new TimeSpan(this.getKundenWechselZeit()));
     }
 
     /**
      * Initialisierung des Modells
      */
     public void init() {
-        this.kundenAnkunftsZeit = new ContDistExponential(this, "Ankunftszeitintervall", 3.0, true, true);
+        this.kundenAnkunftsZeit = new DiscreteDistPoisson(this, "Ankunftszeitintervall", 1.0, true, true);
         this.kundenAnkunftsZeit.setNonNegative(true);
         //kundenAnkunftsZeit.setSeed(1234567890);
 
-        this.kundenWechselZeit = new ContDistExponential(this, "Wechselzeitintervall", 5.0, true, true);
-        this.kundenWechselZeit.setNonNegative(true);
+        //this.kundenWechselZeit = new ContDistExponential(this, "Wechselzeitintervall", 5.0, true, true);
+        //this.kundenWechselZeit.setNonNegative(true);
 
         this.bedienZeit = new ContDistUniform(this, "Bedienzeiten", 0.5, 10.0, true, true);
     }
@@ -88,6 +89,7 @@ public abstract class WaitStrategyModel extends Model {
     public abstract KundeEntity kundenWarteschlangeQueueFirst(KundeEntity kunde);
     public abstract String kundenWarteschlangeQueueToString();
 
+    public abstract int getShortestWarteschlange();
     public abstract int getBestWarteschlange();
     public abstract void doKundenWechsel();
 
