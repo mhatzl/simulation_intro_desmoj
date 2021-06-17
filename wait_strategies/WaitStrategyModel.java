@@ -7,21 +7,13 @@ import desmoj.core.simulator.TimeSpan;
 public abstract class WaitStrategyModel extends Model {
 
     private DiscreteDistPoisson kundenAnkunftsZeit;
-    private ContDistExponential kundenWechselZeit;
     private ContDistUniform bedienZeit;
 
     /**
      * liefert eine Zufallszahl fuer Kundenankunftszeit
      */
-    public double getKundenAnkunftsZeit() {
+    public Long getKundenAnkunftsZeit() {
         return kundenAnkunftsZeit.sample();
-    }
-
-    /**
-     * liefert eine Zufallszahl fuer Kundenwechselzeit
-     */
-    public double getKundenWechselZeit() {
-        return kundenWechselZeit.sample();
     }
 
     /**
@@ -54,22 +46,14 @@ public abstract class WaitStrategyModel extends Model {
     public void doInitialSchedules() {
         NeuerKundeEvent ersterKunde = new NeuerKundeEvent(this, "Kundenkreation", true);
         ersterKunde.schedule(new TimeSpan(this.getKundenAnkunftsZeit()));
-
-        // Kunde aus Warteschlange kann Warteschlange wechseln
-        //KundeWechselEvent kundenWechsel = new KundeWechselEvent (this, "Kundenwechsel", true);
-        //kundenWechsel.schedule(new TimeSpan(this.getKundenWechselZeit()));
     }
 
     /**
      * Initialisierung des Modells
      */
     public void init() {
-        this.kundenAnkunftsZeit = new DiscreteDistPoisson(this, "Ankunftszeitintervall", 1.0, true, true);
+        this.kundenAnkunftsZeit = new DiscreteDistPoisson(this, "Ankunftszeitintervall", 5, true, true);
         this.kundenAnkunftsZeit.setNonNegative(true);
-        //kundenAnkunftsZeit.setSeed(1234567890);
-
-        //this.kundenWechselZeit = new ContDistExponential(this, "Wechselzeitintervall", 5.0, true, true);
-        //this.kundenWechselZeit.setNonNegative(true);
 
         this.bedienZeit = new ContDistUniform(this, "Bedienzeiten", 0.5, 10.0, true, true);
     }

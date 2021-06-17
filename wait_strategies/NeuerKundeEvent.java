@@ -20,6 +20,10 @@ public class NeuerKundeEvent extends ExternalEvent {
         kundenAnkunft.schedule(kunde, new TimeSpan(0.0));
 
         NeuerKundeEvent neuerKunde = new NeuerKundeEvent(this.meinModel, "Kundenkreation", true);
-        neuerKunde.schedule (new TimeSpan(this.meinModel.getKundenAnkunftsZeit()));
+        Long ankunftszeit = this.meinModel.getKundenAnkunftsZeit();
+        neuerKunde.schedule (new TimeSpan(ankunftszeit));
+
+        KundenCounter.getInstance().kundenCounterList[(int) meinModel.getExperiment().getSimClock().getTime().getTimeAsDouble()] ++ ;
+
     }
 }

@@ -137,18 +137,21 @@ public class MultiWaitStrategyModel extends WaitStrategyModel {
 
     @Override
     public void doKundenWechsel() {
-
+        int laengeWS1, laengeWS2;
         for (int i = 0; i < this.kundenReiheQueues.size(); i++) {
             if (this.kundenReiheQueues.get(i).length() > 1) {
                 var kunde = this.kundenReiheQueues.get(i).last();
                 var bestWarteschlange = this.getBestWarteschlange();
                 if (bestWarteschlange != -1 && kunde.getWarteschlangeZuordnung() != bestWarteschlange) {
+                    laengeWS1 = this.kundenReiheQueues.get(i).length();
+                    laengeWS2 = this.kundenReiheQueues.get(bestWarteschlange).length();
+
                     kunde.setWarteschlangeZuordnung(bestWarteschlange);
                     this.kundenReiheQueues.get(bestWarteschlange).insert(kunde);
                     this.kundenReiheQueues.get(i).remove(kunde);
 
-                    sendTraceNote("Kunde wechselt von Warteschlange " + (i + 1) + " (Laenge: " + this.kundenReiheQueues.get(i).length()
-                            + ") -> " + (bestWarteschlange + 1) + " (Laenge: " + this.kundenReiheQueues.get(bestWarteschlange).length() + ")");
+                    sendTraceNote("Kunde wechselt von Warteschlange " + (i + 1) + " (Laenge: " + laengeWS1
+                            + ") -> " + (bestWarteschlange + 1) + " (Laenge: " + laengeWS2 + ")");
                 } /*else
                     sendTraceNote("Kunde wechselt NICHT von Warteschlange " + (i + 1) + " (Laenge: " + this.kundenReiheQueues.get(i).length()
                         + ") -> " + (bestWarteschlange + 1) + " (Laenge: " + this.kundenReiheQueues.get(bestWarteschlange).length() + ")");
