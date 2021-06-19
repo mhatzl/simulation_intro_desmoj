@@ -13,8 +13,8 @@ public class WaitStrategiesExperiments {
 
     /**Warteschlangen-Wechsel (QUEUE_WECHSEL):
      * 0: ein Kunde darf NICHT die Warteschlange wechseln, wenn er sich bereits für eine Entschieden hat
-     * 1: der letzte Kunde einer Warteschlange kann zu einer Warteschlange wechseln die um 2 KUNDEN KUERZER ist
-     * 2: der letzte Kunde einer Warteschlange kann zu einer Warteschlange wechseln die eine KÜRZER */
+     * 1: der letzte Kunde einer Warteschlange kann zu einer Warteschlange wechseln die um 2 Kunden KUERZER ist
+     * 2: der letzte Kunde einer Warteschlange kann zu einer Warteschlange wechseln die eine KÜRZERE Wartezeit hat */
     public static final int QUEUE_WECHSEL = 2;
 
     public static final int SIMULATION_TIME = 24 * 60; // h -> min
