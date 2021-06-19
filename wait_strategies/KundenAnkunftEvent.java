@@ -14,7 +14,12 @@ public class KundenAnkunftEvent extends Event<KundeEntity> {
     }
 
     public void eventRoutine(KundeEntity kunde) {
-        kunde.setWarteschlangeZuordnung(this.meinModel.getShortestWarteschlange());
+        // Kunde wählt bei Ankunft kuerzeste Warteschlange
+        if(WaitStrategiesExperiments.QUEUE_DECISION)
+            kunde.setWarteschlangeZuordnung(this.meinModel.getShortestWarteschlange());
+        // Kunde wählt bei Ankunft schnellste Warteschlange
+        else
+            kunde.setWarteschlangeZuordnung(this.meinModel.getFastestWarteschlange());
 
         this.meinModel.kundenWarteschlangeQueueInsert(kunde);
         sendTraceNote(this.meinModel.kundenWarteschlangeQueueToString());

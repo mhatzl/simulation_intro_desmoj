@@ -117,7 +117,24 @@ public class MultiWaitStrategyModel extends WaitStrategyModel {
             }
         }
 
-        return bestWarteschlangenIndex; }
+        return bestWarteschlangenIndex;
+    }
+
+    @Override
+    public int getFastestWarteschlange() {
+        int bestWarteschlangenIndex = 0;
+        double bestWarteschlangenTime = this.kundenReiheQueues.get(0).averageWaitTime().getTimeAsDouble();
+
+        for (int i = 0; i < this.kundenReiheQueues.size(); i++) {
+            double actWarteschlangenTime = this.kundenReiheQueues.get(i).averageWaitTime().getTimeAsDouble();
+            if (bestWarteschlangenTime > actWarteschlangenTime) {
+                bestWarteschlangenTime = actWarteschlangenTime;
+                bestWarteschlangenIndex = i;
+            }
+        }
+
+        return bestWarteschlangenIndex;
+    }
 
     @Override
     public int getBestWarteschlange() {
@@ -138,20 +155,43 @@ public class MultiWaitStrategyModel extends WaitStrategyModel {
     @Override
     public void doKundenWechsel() {
         int laengeWS1, laengeWS2;
+        double avgTimeWS1, avgTimeWS2;
+        int bestWarteschlange;
+
         for (int i = 0; i < this.kundenReiheQueues.size(); i++) {
             if (this.kundenReiheQueues.get(i).length() > 1) {
                 var kunde = this.kundenReiheQueues.get(i).last();
-                var bestWarteschlange = this.getBestWarteschlange();
+
+                // beste Warteschlange == kürzeste Warteschlange
+                if (WaitStrategiesExperiments.QUEUE_WECHSEL == 1)
+                    bestWarteschlange = this.getBestWarteschlange();
+                // beste Warteschlange == schnellste Warteschlange
+                else if (WaitStrategiesExperiments.QUEUE_WECHSEL == 2)
+                    bestWarteschlange = this.getFastestWarteschlange();
+                else
+                    throw new RuntimeException("Wrong number declared for global constand WaitStrategiesExperiments.QUEUE_WECHSEL, number "
+                            + WaitStrategiesExperiments.QUEUE_WECHSEL + " not allowed (allowed numbers are described above declaration)");
+
                 if (bestWarteschlange != -1 && kunde.getWarteschlangeZuordnung() != bestWarteschlange) {
-                    laengeWS1 = this.kundenReiheQueues.get(i).length();
-                    laengeWS2 = this.kundenReiheQueues.get(bestWarteschlange).length();
+
+                    if (WaitStrategiesExperiments.QUEUE_WECHSEL == 1) {
+                        laengeWS1 = this.kundenReiheQueues.get(i).length();
+                        laengeWS2 = this.kundenReiheQueues.get(bestWarteschlange).length();
+                    } else if (WaitStrategiesExperiments.QUEUE_WECHSEL == 2) {
+                        avgTimeWS1 = this.kundenReiheQueues.get(i).averageWaitTime().getTimeAsDouble();
+                        avgTimeWS2 = this.kundenReiheQueues.get(bestWarteschlange).averageWaitTime().getTimeAsDouble();
+                    }
 
                     kunde.setWarteschlangeZuordnung(bestWarteschlange);
                     this.kundenReiheQueues.get(bestWarteschlange).insert(kunde);
                     this.kundenReiheQueues.get(i).remove(kunde);
 
-                    sendTraceNote("Kunde wechselt von Warteschlange " + (i + 1) + " (prev. Laenge: " + laengeWS1
+                    if(WaitStrategiesExperiments.QUEUE_WECHSEL == 1)
+                        sendTraceNote("Kunde wechselt von Warteschlange " + (i + 1) + " (prev. Laenge: " + laengeWS1
                             + ") -> " + (bestWarteschlange + 1) + " (prev. Laenge: " + laengeWS2 + ")");
+                    else if (WaitStrategiesExperiments.QUEUE_WECHSEL == 2)
+                        sendTraceNote("Kunde wechselt von Warteschlange " + (i + 1) + " (prev. avg. Waittime: " + avgTimeWS1
+                                + ") -> " + (bestWarteschlange + 1) + " (prev. avg. Waittime: " + avgTimeWS2 + ")");
                 }
             }
         }

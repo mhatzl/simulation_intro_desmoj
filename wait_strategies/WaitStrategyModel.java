@@ -99,6 +99,7 @@ public abstract class WaitStrategyModel extends Model {
     public abstract String kundenWarteschlangeQueueToString();
 
     public abstract int getShortestWarteschlange();
+    public abstract int getFastestWarteschlange();
     public abstract int getBestWarteschlange();
     public abstract void doKundenWechsel();
 
