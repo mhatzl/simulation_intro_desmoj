@@ -96,10 +96,11 @@ public class MultiWaitStrategyModel extends WaitStrategyModel {
 
     @Override
     public String kundenWarteschlangeQueueToString() {
-        StringBuilder s = new StringBuilder("Laenge der Kundenreihen:" + System.lineSeparator());
+        StringBuilder s = new StringBuilder("Laenge / avg. Wartezeit der Kundenreihen:" + System.lineSeparator());
         for (int i = 0; i < this.kundenReiheQueues.size(); i++) {
             int length = this.kundenReiheQueues.get(i).length();
-            s.append("  WS_").append(i).append(": ").append(length).append(System.lineSeparator());
+            double avgWait = this.kundenReiheQueues.get(i).averageWaitTime().getTimeAsDouble();
+            s.append("  WS_").append(i).append(": ").append(length).append(" / ").append(avgWait).append(System.lineSeparator());
         }
         return s.toString();
     }
@@ -126,11 +127,14 @@ public class MultiWaitStrategyModel extends WaitStrategyModel {
         double bestWarteschlangenTime = this.kundenReiheQueues.get(0).averageWaitTime().getTimeAsDouble();
 
         for (int i = 0; i < this.kundenReiheQueues.size(); i++) {
-            double actWarteschlangenTime = this.kundenReiheQueues.get(i).averageWaitTime().getTimeAsDouble();
-            if (bestWarteschlangenTime > actWarteschlangenTime) {
-                bestWarteschlangenTime = actWarteschlangenTime;
-                bestWarteschlangenIndex = i;
-            }
+            if(this.kundenReiheQueues.get(i).length() > 0) {
+                double actWarteschlangenTime = this.kundenReiheQueues.get(i).averageWaitTime().getTimeAsDouble();
+                if (bestWarteschlangenTime > actWarteschlangenTime) {
+                    bestWarteschlangenTime = actWarteschlangenTime;
+                    bestWarteschlangenIndex = i;
+                }
+            } else
+                return i;
         }
 
         return bestWarteschlangenIndex;

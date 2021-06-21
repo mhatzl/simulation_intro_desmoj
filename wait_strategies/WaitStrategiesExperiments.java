@@ -1,6 +1,5 @@
 import desmoj.core.simulator.*;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
@@ -8,14 +7,14 @@ public class WaitStrategiesExperiments {
 
     /**Warteschlangen-Entscheid bei Kundenankunft (QUEUE_DECISION):
      * true: ein Kunde entscheidet sich bei der Ankunft für die kürzere Warteschlange (realistisches Ereignis)
-     * false: ein Kunde entscheidet sich bei der Ankunft für die schnellere Warteschlange (durchschnittliche Wartezeit) */
+     * false: ein Kunde entscheidet sich bei der Ankunft für die schnellere Warteschlange (durchschnittliche Wartezeit) oder leere Warteschlange */
     public static final boolean QUEUE_DECISION = false;
 
     /**Warteschlangen-Wechsel (QUEUE_WECHSEL):
      * 0: ein Kunde darf NICHT die Warteschlange wechseln, wenn er sich bereits für eine Entschieden hat
      * 1: der letzte Kunde einer Warteschlange kann zu einer Warteschlange wechseln die um 2 Kunden KUERZER ist
      * 2: der letzte Kunde einer Warteschlange kann zu einer Warteschlange wechseln die eine KÜRZERE Wartezeit hat */
-    public static final int QUEUE_WECHSEL = 2;
+    public static final int QUEUE_WECHSEL = 0;
 
     public static final int SIMULATION_TIME = 24 * 60; // h -> min
 
