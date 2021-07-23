@@ -79,7 +79,8 @@ public abstract class WaitStrategyModel extends Model {
     public void init() {
         this.kundenAnkunftsZeit = new DiscreteDistPoisson(this, "Ankunftszeitintervall", 5, true, true);    // 1 Kunde pro meanValue im Durchschnitt
         this.kundenAnkunftsZeit.setNonNegative(true);
-        kundenAnkunftsZeit.setSeed(91229105);
+
+        kundenAnkunftsZeit.setSeed(WaitStrategiesExperiments.KUNDENANKUNFT_SEED);
 
         this.bedienZeit = new ContDistUniform(this, "Bedienzeiten", 0.5, 10.0, true, true);
     }
