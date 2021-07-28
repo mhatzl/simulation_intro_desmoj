@@ -28,6 +28,10 @@ public class WaitStrategiesExperiments {
     // - 987654321
     // - 24681012
     // - 135791113
+    // - 35978919
+    // - 57978018
+    // - 357978919
+    // - 543459781
     public static final long KUNDENANKUNFT_SEED = 135791113;
 
     private static String parametersAsString(int nrSchalter, String wsType){
